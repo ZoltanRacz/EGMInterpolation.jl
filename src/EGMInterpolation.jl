@@ -1,5 +1,5 @@
 module EGMInterpolation
 
-# Write your package code here.
+include("interpolation.jl")
 
 end
