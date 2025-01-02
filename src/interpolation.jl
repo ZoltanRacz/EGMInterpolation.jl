@@ -41,7 +41,6 @@ function finda(agrid::AbstractVector,zgrid::AbstractVector,zin::Integer,a::Real)
 end
 
 """
-$(TYPEDSIGNATURES)
 
 linear inter/extrapolation from the values at the 4 nearby (z,a) grid points
 """
@@ -54,13 +53,12 @@ function lin_trap(a,z,al1,ah1,al2,ah2,zl,zh,vl1,vh1,vl2,vh2)
 end
 
 """
-$(TYPEDSIGNATURES)
 
 Perform 2D linear interpolation at (z,a) given grids and values, with arbitrary z.
 
 agrid and vals are both vectors of vectors. This is necessary as coh grids depends on permannet income state. For example, agrid[zi] gives the grid for coh corresponding to zgrid[zi]. 
 """
-function evaluate(agrid::AbstractVector,vals::AbstractVector,zgrid::Grids,z::Real,a::Real)
+function evaluate(agrid::AbstractVector,vals::AbstractVector,zgrid::AbstractVector,z::Real,a::Real)
     zhin = findz(tg,z)
     zlin = zhin-1
     ah1in = finda(agrid,tg,zlin,a)
@@ -78,7 +76,6 @@ function evaluate(agrid::AbstractVector,vals::AbstractVector,zgrid::Grids,z::Rea
 end
 
 """
-$(TYPEDSIGNATURES)
 
 Performs 2D linear interpolation at (z,a) given grids and values, with z on the grid, given with index (integer).
 
@@ -188,17 +185,3 @@ function evaluate2(agrid::AbstractVector,vals::AbstractVector,zgrid::AbstractVec
         @error("what then?")
     end
 end
-
-# alims = [0.0,2.0]
-# pzlims = [-4.0,4.0]
-# zis = (1:length(tgc.zgrid))[(tgc.zgrid.>pzlims[1]).&(tgc.zgrid.<pzlims[2])]
-#
-# g = vcat([[soluc.coh[1][zi][ai] tgc.zgrid[zi] soluc.vf[1][zi][ai]] for zi in zis for ai in 1:length(soluc.coh[1][zi])]...)
-#
-# as = range(alims[1],alims[2];length = 99)
-# zs = range(pzlims[1],pzlims[2];length = 100)
-# A = [evaluate(soluc.coh[1],soluc.vf[1],tgc,z,a) for z in zs, a in as]
-# A2 = [evaluate2(soluc.coh[1],soluc.vf[1],tgc,z,a) for z in zs, a in as]
-#
-# scatter(g[:,1],g[:,2] ,xlims = alims, ylims = pzlims)
-# plot!(as,zs,A-A2,st=:heatmap, alpha=0.2)
