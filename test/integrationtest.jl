@@ -17,9 +17,21 @@ egmif = EGMInterpolatedFunction(zs,ags,fs)
 
 @test egmif isa EGMInterpolatedFunction
 
+function allocmeasure(zs,ags,fs)
+    return @allocated EGMInterpolatedFunction(zs,ags,fs)
+end
+
+@test allocmeasure(zs,ags,fs) == 0
+
 @test evaluate(egmif,0.2,0.1) isa Real
 
 @test evaluate(egmif,zs[2],ags[2][3]) == f(ags[2][3],zs[2])
+
+function allocmeasure2(egmif)
+    return @allocated evaluate(egmif,0.2,0.1)
+end
+
+@test allocmeasure2(egmif) == 0
 
 zl_full = 400
 al_full = 600
