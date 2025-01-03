@@ -17,9 +17,13 @@ egmif = EGMInterpolatedFunction(zs,ags,fs)
 
 @test egmif isa EGMInterpolatedFunction
 
+@test @allocated EGMInterpolatedFunction($zs,$ags,$fs) == 0
+
 @test evaluate(egmif,0.2,0.1) isa Real
 
 @test evaluate(egmif,zs[2],ags[2][3]) == f(ags[2][3],zs[2])
+
+@test @allocated evaluate($egmif,0.2,0.1) == 0
 
 zl_full = 400
 al_full = 600
