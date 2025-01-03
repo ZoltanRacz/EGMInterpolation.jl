@@ -19,7 +19,7 @@ egmif = EGMInterpolatedFunction(zs,ags,fs)
 
 @test evaluate(egmif,0.2,0.1) isa Real
 
-@test evaluate(egmif,ags[2][3],zs[2]) = f(ags[2][3],zs[2])
+@test evaluate(egmif,zs[2],ags[2][3]) == f(ags[2][3],zs[2])
 
 zl_full = 400
 al_full = 600

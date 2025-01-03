@@ -1,6 +1,3 @@
-@warn("does this code allocate nowadays? can we delete commented out lines?")
-
-
 """
 gives the index of the higher z point which will be taken into account when interpolating
 """
