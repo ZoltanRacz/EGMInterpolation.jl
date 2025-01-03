@@ -59,10 +59,10 @@ Perform 2D linear interpolation at (z,a) given grids and values, with arbitrary 
 agrid and vals are both vectors of vectors. This is necessary as coh grids depends on permannet income state. For example, agrid[zi] gives the grid for coh corresponding to zgrid[zi]. 
 """
 function evaluate(agrid::AbstractVector,vals::AbstractVector,zgrid::AbstractVector,z::Real,a::Real)
-    zhin = findz(tg,z)
+    zhin = findz(zgrid,z)
     zlin = zhin-1
-    ah1in = finda(agrid,tg,zlin,a)
-    ah2in = finda(agrid,tg,zhin,a)
+    ah1in = finda(agrid,zgrid,zlin,a)
+    ah2in = finda(agrid,zgrid,zhin,a)
     al1in = ah1in-1
     al2in = ah2in-1
     zl = zgrid[zlin]
@@ -185,3 +185,21 @@ function evaluate2(agrid::AbstractVector,vals::AbstractVector,zgrid::AbstractVec
         @error("what then?")
     end
 end
+
+"""
+$(TYPEDEF)
+# Description
+Interpolation object
+# Fields
+$(FIELDS)
+"""
+struct EGMInterpolatedFunction{T<:AbstractFloat}
+    "Shared grid, for uniform dimension"
+    zgrid::Vector{T}
+    "Different grids for each z point"
+    agrids::Vector{Vector{T}}
+    "Function values at grid points"
+    vals::Vector{Vector{T}}
+end
+
+evaluate(egmif::EGMInterpolatedFunction,z::Real,a::Real) = evaluate(egmif.agrids,egmif.vals,egmif.zgrid,z,a)

@@ -3,6 +3,9 @@ uuid = "d2216c3f-a8b3-467e-80da-a34a198f786c"
 authors = ["Zoltán Rácz"]
 version = "0.1.0"
 
+[deps]
+DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+
 [compat]
 julia = "1.6.7"
 

@@ -3,17 +3,41 @@
 #TestEnv.activate()
 using EGMInterpolation, Test, Plots
 
+zl = 7
+al = 10
+zs = collect(range(0.0,1.0;length = zl))
 
-alims = [0.0,2.0]
-pzlims = [-4.0,4.0]
-zis = (1:length(tgc.zgrid))[(tgc.zgrid.>pzlims[1]).&(tgc.zgrid.<pzlims[2])]
+ags = [collect(range(0.0,1.0;length = al)).^(i*0.1) for i in 1:zl]
 
-g = vcat([[soluc.coh[1][zi][ai] tgc.zgrid[zi] soluc.vf[1][zi][ai]] for zi in zis for ai in 1:length(soluc.coh[1][zi])]...)
+f(x,y) = x^2 + y^2
 
-as = range(alims[1],alims[2];length = 99)
-zs = range(pzlims[1],pzlims[2];length = 100)
-A = [evaluate(soluc.coh[1],soluc.vf[1],tgc,z,a) for z in zs, a in as]
-A2 = [evaluate2(soluc.coh[1],soluc.vf[1],tgc,z,a) for z in zs, a in as]
+fs = [[f(ags[zi][ai],zs[zi]) for ai in 1:al]  for zi in 1:zl]
 
-scatter(g[:,1],g[:,2] ,xlims = alims, ylims = pzlims)
-plot!(as,zs,A-A2,st=:heatmap, alpha=0.2)
+egmif = EGMInterpolatedFunction(zs,ags,fs)
+
+@test egmif isa EGMInterpolatedFunction
+
+@test evaluate(egmif,0.2,0.1) isa Real
+
+@test evaluate(egmif,ags[2][3],zs[2]) = f(ags[2][3],zs[2])
+
+zl_full = 400
+al_full = 600
+
+zs_full = collect(range(-0.2,1.2;length = zl_full))
+as_full = collect(range(-0.2,1.2;length = al_full))
+
+fs_full = [f(as_full[ai],zs_full[zi]) for zi in 1:zl_full, ai in 1:al_full]
+
+fs_int_full = [evaluate(egmif,zs_full[zi],as_full[ai]) for zi in 1:zl_full, ai in 1:al_full]
+
+plot(as_full,zs_full,fs_full,st=:heatmap)
+
+plot(as_full,zs_full,fs_int_full,st=:heatmap)
+
+p = plot(as_full,zs_full,fs_int_full.-fs_full,st=:heatmap, xlabel = "a", ylabel = "z")
+
+for zi in 1:zl
+    p = scatter!(ags[zi],fill(zs[zi],al), label = "")
+end
+display(p)
