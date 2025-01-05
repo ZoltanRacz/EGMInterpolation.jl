@@ -1,6 +1,6 @@
 # useful lines for testing manually, while developing. Install TestEnv in your main environment. When running the first time, activate and instantiate the test environment before restarting Julia and using TestEnv. For more info check: https://github.com/JuliaTesting/TestEnv.jl/blob/main/README.md
-#using TestEnv
-#TestEnv.activate()
+using TestEnv
+TestEnv.activate()
 using EGMInterpolation, Test, Plots
 
 zl = 7
@@ -25,7 +25,11 @@ end
 
 @test evaluate(egmif,0.2,0.1) isa Real
 
+@test evaluate(egmif,3,0.1) isa Real
+
 @test evaluate(egmif,zs[2],ags[2][3]) == f(ags[2][3],zs[2])
+
+@test evaluate(egmif,zs[2],ags[2][3]) == egmif(zs[2],ags[2][3])
 
 function allocmeasure2(egmif)
     return @allocated evaluate(egmif,0.2,0.1)
