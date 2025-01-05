@@ -200,3 +200,5 @@ struct EGMInterpolatedFunction{T<:AbstractFloat}
 end
 
 evaluate(egmif::EGMInterpolatedFunction,z::Real,a::Real) = evaluate(egmif.agrids,egmif.vals,egmif.zgrid,z,a)
+
+(egmif::EGMInterpolatedFunction)(z::Real,a::Real) = evaluate(egmif,z,a)

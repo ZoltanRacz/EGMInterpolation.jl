@@ -25,7 +25,11 @@ end
 
 @test evaluate(egmif,0.2,0.1) isa Real
 
+@test evaluate(egmif,3,0.1) isa Real
+
 @test evaluate(egmif,zs[2],ags[2][3]) == f(ags[2][3],zs[2])
+
+@test evaluate(egmif,zs[2],ags[2][3]) == egmif(zs[2],ags[2][3])
 
 function allocmeasure2(egmif)
     return @allocated evaluate(egmif,0.2,0.1)
